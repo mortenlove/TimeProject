@@ -43,13 +43,20 @@ public class MainActivity extends AppCompatActivity {
 //                        timetxt.setText(hour + ":" + minutes + ":" + seconds);
                         for (int i = 0; i < lessonshours.length; i += 2) {
                             System.out.println(lessonshours[i] + ":" + lessonsminutes[i] + " - " + lessonshours[i+1]+ ":" + lessonsminutes[i+1]);
-                            if ((hour == lessonshours[i] && minutes >= lessonsminutes[i]) || (hour == lessonshours[i+1] && minutes <= lessonsminutes[i+1])) {
+                            if ((hour == lessonshours[i] & minutes >= lessonsminutes[i]) | (hour == lessonshours[i+1] & minutes <= lessonsminutes[i+1])) {
 //                                for (int j = 0; j < lessonsminutes.length; j++) {
 //
 //                                }
                                 int left = lessonsminutes[i+1]-minutes;
                                 timetxt.setText("Осталось до конца - " + left);
                                 System.out.println("True " + lessonshours[i] + ":" + lessonsminutes[i]);
+//                                if (left < 0) {
+//                                    timetxt.setText("перемена");
+//                                } else {
+//                                    timetxt.setText("Осталось до конца - " + left);
+//                                }
+
+
                             }
                             else {
                                 System.out.println("False ");
