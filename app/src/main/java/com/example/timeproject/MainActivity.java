@@ -40,17 +40,41 @@ public class MainActivity extends AppCompatActivity {
                         int hour = zone.getHour();
                         int minutes = zone.getMinute();
                         int seconds = zone.getSecond();
-//                        timetxt.setText(hour + ":" + minutes + ":" + seconds);
-                        for (int i = 0; i < lessonshours.length; i += 2) {
+                        outtime.setText(hour + ":" + minutes + ":" + seconds);
+                        for (int i = 0; i < lessonshours.length; i+=2)
+                        {
+                            //System.out.println(lessonsminutes[i] + "  " + lessonsminutes[i+1]);
                             System.out.println(lessonshours[i] + ":" + lessonsminutes[i] + " - " + lessonshours[i+1]+ ":" + lessonsminutes[i+1]);
-                            if ((hour == lessonshours[i] && minutes >= lessonsminutes[i]) || (hour == lessonshours[i+1] && minutes <= lessonsminutes[i+1])) {
-                                int left = lessonsminutes[i+1]-minutes;
-                                timetxt.setText("Осталось до конца - " + left);
+
+                            if ((hour == lessonshours[i] && minutes >= lessonsminutes[i]) || (hour == lessonshours[i+1] && minutes <= lessonsminutes[i+1]))
+                            {
+                                //if (hour == lessonshours[i] & minutes >= lessonsminutes[i+1] & minutes <= lessonsminutes[i+2])
+                                //{
+                                // System.out.println("перемена между " + lessonshours[i+1] + ":" + lessonsminutes[i+1]  + "&" +  lessonshours[i+2] + ":" + lessonsminutes[i+2]);
+
+
+                                // int left = lessonsminutes[i+1]-minutes;
                                 System.out.println("True " + lessonshours[i] + ":" + lessonsminutes[i]);
+                                // FULL COMPLETED LESSON TIME
+                                if (lessonsminutes[i+1] < 40)
+                                {
+                                    int leftmost = lessonsminutes[i+1] + 60 - minutes;
+                                    System.out.println("left1 = " + leftmost);
+                                    timetxt.setText("" + leftmost);
+                                }
+                                else
+                                {
+                                    int left = lessonsminutes[i+1]-minutes;
+                                    System.out.println("left2 = " + left);
+                                    timetxt.setText("" + left);
+                                }
                             }
-                            else {
+                            else
+                            {
                                 System.out.println("False ");
                             }
+
+
                         }
                     }
                 });
