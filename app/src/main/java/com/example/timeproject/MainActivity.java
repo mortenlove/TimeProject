@@ -44,31 +44,13 @@ class Terms
     }
 }
 
-//class Calculate
-//{
-//    // ПОДСЧЕТ ОСТАВШЕГОСЯ ВРЕМЕНИ
-//    public int mins;
-//    public int getMins(int currmins, int calcmins)
-//    {
-//        mins = calcmins - currmins;
-//        return mins;
-//    }
-//}
-
-//class Output
-//{
-//    public boolean isoutput;
-//    public boolean setOutput(S)
-//}
-
 public class MainActivity extends AppCompatActivity
 {
-
-
     final int[] startlessonshours = new int[] {8,8,9,10,11,12,13,13,14,15,16,16,17,18};
-    final int[] startlessonsminutes = new int[] {0,50,35,20,15,0,0,45,30,15,5,50,35,20};
     final int[] endlessonshours = new int[] {8,9,10,11,11,12,13,14,15,15,16,17,18,19};
+    final int[] startlessonsminutes = new int[] {0,50,35,20,15,0,0,45,30,15,5,50,35,20};
     final int[] endlessonsminutes = new int[] {40,30,15,0,55,40,40,25,10,55,45,30,15,0};
+
     int lesson;
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -78,10 +60,10 @@ public class MainActivity extends AppCompatActivity
 
         final TextView timetxt = (TextView) findViewById(R.id.textView);
         final TextView outtime = (TextView) findViewById(R.id.textView2);
+        final TextView finaltime = (TextView) findViewById(R.id.textView3);
 
         Convert conv = new Convert();
         Terms terms = new Terms();
-
         Timer timer = new Timer();
 
         timer.scheduleAtFixedRate(new TimerTask()
@@ -94,7 +76,6 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void run()
                     {
-                        System.out.println("HELLO WORLD");
                         ZonedDateTime zone = ZonedDateTime.now();
                         int hour = zone.getHour();
                         int minutes = zone.getMinute();
@@ -102,20 +83,28 @@ public class MainActivity extends AppCompatActivity
                         outtime.setText(hour + ":" + minutes + ":" + seconds);
                         for (int i = 0; i < startlessonshours.length; i++)
                         {
-//                            for (int j = 1; j < startlessonsminutes.length; j++)
-//                            {
-                                if (terms.getTerms(conv.getConvert(startlessonshours[i], startlessonsminutes[i]), conv.getConvert(endlessonshours[i], endlessonsminutes[i]), conv.getConvert(hour, minutes)))
+                            if (terms.getTerms(conv.getConvert(startlessonshours[i], startlessonsminutes[i]), conv.getConvert(endlessonshours[i], endlessonsminutes[i]), conv.getConvert(hour, minutes)))
+                            {
+                                timetxt.setText("До конца урока: " + (conv.getConvert(endlessonshours[i], endlessonsminutes[i]) - conv.getConvert(hour, minutes)) + " минут.");
+                            }
+                            else
+                            {
+                                if(i%2==1)
                                 {
-                                    timetxt.setText("" + (conv.getConvert(endlessonshours[i], endlessonsminutes[i]) - conv.getConvert(hour, minutes)));
+                                    if (conv.getConvert(hour,minutes) <= conv.getConvert(startlessonshours[i] ,startlessonsminutes[i]) & conv.getConvert(hour,minutes) >= conv.getConvert(endlessonshours[i-1] ,endlessonsminutes[i-1]))
+                                    {
+                                        timetxt.setText("До конца перемены: " + (conv.getConvert(startlessonshours[i] ,startlessonsminutes[i])-conv.getConvert(hour,minutes)) + " минут.");
+                                    }
                                 }
-                                else
+                                else if (i%2!=1 & i != 0)
                                 {
-//                                    if (terms.getTerms1(conv.getConvert(endlessonshours[i], endlessonsminutes[i]), conv.getConvert(startlessonshours[j], startlessonsminutes[j]), conv.getConvert(hour, minutes)))
-//                                    {
-//                                        timetxt.setText("" + (conv.getConvert(startlessonshours[j], startlessonsminutes[j]) - conv.getConvert(hour, minutes)));
-//                                    }
+                                    if (conv.getConvert(hour,minutes) <= conv.getConvert(startlessonshours[i] ,startlessonsminutes[i]) & conv.getConvert(hour,minutes) >= conv.getConvert(endlessonshours[i-1] ,endlessonsminutes[i-1]))
+                                    {
+                                        timetxt.setText("До конца перемены: " + (conv.getConvert(startlessonshours[i] ,startlessonsminutes[i])-conv.getConvert(hour,minutes)) + " минут.");
+                                    }
+
                                 }
-//                            }
+                            }
                         }
                     }
                 });
