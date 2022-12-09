@@ -89,21 +89,30 @@ public class MainActivity extends AppCompatActivity
                             }
                             else
                             {
-                                if(i%2==1)
-                                {
-                                    if (conv.getConvert(hour,minutes) <= conv.getConvert(startlessonshours[i] ,startlessonsminutes[i]) & conv.getConvert(hour,minutes) >= conv.getConvert(endlessonshours[i-1] ,endlessonsminutes[i-1]))
-                                    {
-                                        timetxt.setText("До конца перемены: " + (conv.getConvert(startlessonshours[i] ,startlessonsminutes[i])-conv.getConvert(hour,minutes)) + " минут.");
-                                    }
-                                }
-                                else if (i%2!=1 & i != 0)
-                                {
-                                    if (conv.getConvert(hour,minutes) <= conv.getConvert(startlessonshours[i] ,startlessonsminutes[i]) & conv.getConvert(hour,minutes) >= conv.getConvert(endlessonshours[i-1] ,endlessonsminutes[i-1]))
-                                    {
-                                        timetxt.setText("До конца перемены: " + (conv.getConvert(startlessonshours[i] ,startlessonsminutes[i])-conv.getConvert(hour,minutes)) + " минут.");
-                                    }
 
+                                if (i!=0)
+                                {
+                                    if (conv.getConvert(hour,minutes) <= conv.getConvert(startlessonshours[i] ,startlessonsminutes[i]) & conv.getConvert(hour,minutes) >= conv.getConvert(endlessonshours[i-1] ,endlessonsminutes[i-1]))
+                                    {
+                                        timetxt.setText("До конца перемены: " + (conv.getConvert(startlessonshours[i] ,startlessonsminutes[i])-conv.getConvert(hour,minutes)) + " минут.");
+                                    }
                                 }
+
+//                                if(i%2==1)
+//                                {
+//                                    if (conv.getConvert(hour,minutes) <= conv.getConvert(startlessonshours[i] ,startlessonsminutes[i]) & conv.getConvert(hour,minutes) >= conv.getConvert(endlessonshours[i-1] ,endlessonsminutes[i-1]))
+//                                    {
+//                                        timetxt.setText("До конца перемены: " + (conv.getConvert(startlessonshours[i] ,startlessonsminutes[i])-conv.getConvert(hour,minutes)) + " минут.");
+//                                    }
+//                                }
+//                                else if (i%2!=1 & i != 0)
+//                                {
+//                                    if (conv.getConvert(hour,minutes) <= conv.getConvert(startlessonshours[i] ,startlessonsminutes[i]) & conv.getConvert(hour,minutes) >= conv.getConvert(endlessonshours[i-1] ,endlessonsminutes[i-1]))
+//                                    {
+//                                        timetxt.setText("До конца перемены: " + (conv.getConvert(startlessonshours[i] ,startlessonsminutes[i])-conv.getConvert(hour,minutes)) + " минут.");
+//                                    }
+//
+//                                }
                             }
                         }
                     }
