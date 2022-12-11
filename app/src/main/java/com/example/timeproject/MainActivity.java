@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
                         int minutes = zone.getMinute();
                         int seconds = zone.getSecond();
                         DayOfWeek dayofweek = zone.getDayOfWeek();
-                       // String dayofweek = "TUESDAY";
+//                      String dayofweek = "TUESDAY";
                         System.out.println(dayofweek.toString());
                         outtime.setText(hour + ":" + minutes + ":" + seconds);
                         if (dayofweek.toString() == "MONDAY")
