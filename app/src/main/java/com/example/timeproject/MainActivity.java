@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity
                     public void run()
                     {
                         ZonedDateTime zone = ZonedDateTime.now();
-                        int hour = 13;//zone.getHour();
-                        int minutes = 15;//zone.getMinute();
+                        int hour = zone.getHour();
+                        int minutes = zone.getMinute();
                         int seconds = zone.getSecond();
                         //DayOfWeek dayofweek = zone.getDayOfWeek();
                         String dayofweek = "TUESDAY";
