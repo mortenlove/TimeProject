@@ -1,10 +1,16 @@
 package com.example.timeproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -122,6 +128,7 @@ public class MainActivity extends AppCompatActivity
         Timer timer = new Timer();
         LessonsCalc lessons = new LessonsCalc();
 
+
         timer.scheduleAtFixedRate(new TimerTask()
         {
             @Override
@@ -163,3 +170,50 @@ public class MainActivity extends AppCompatActivity
 
     }
 }
+
+//    // Идентификатор уведомления
+//    private int NOTIFY_ID = 101;
+//
+//    // Идентификатор канала
+//    private static final String CHANNEL_ID = "Polytechrasp";
+//
+//    public String str = "Privet;";
+//
+//    int num = 0;
+//
+//
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//
+//    }
+//
+//    public void onClick(View view)
+//    {
+//        // while (true)
+//        // {
+//        //все это 161 строка +-
+//        NotificationCompat.Builder builder
+//                = new NotificationCompat.Builder(MainActivity.this, CHANNEL_ID);
+//        builder.setSmallIcon(R.mipmap.ic_launcher);
+//        builder.setContentTitle("Напоминание"); // сюда заголовок по типу  расписание звонков
+//        builder.setContentText("До конца " + "перемены" + " " + num); //здесь lefttime поидеи
+//        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//        builder.setOngoing(true);
+//
+//        NotificationManagerCompat notificationManager =
+//                NotificationManagerCompat.from(MainActivity.this);
+//        notificationManager.notify(NOTIFY_ID++, builder.build());
+//        // }
+//        createChannelIfNeeded(notificationManager);
+//
+//    }
+//    public static void createChannelIfNeeded(NotificationManagerCompat manager) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_ID, NotificationManager.IMPORTANCE_DEFAULT);
+//            manager.createNotificationChannel(notificationChannel);
+//        }
+//    }
