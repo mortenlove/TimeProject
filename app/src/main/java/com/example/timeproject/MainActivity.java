@@ -41,7 +41,7 @@ class Terms
     // ПЕРЕМЕНА
     public boolean isaterms1;
 
-    public boolean getTerms1(int convtime, int convtime1, int currtime)
+    public boolean getTerms1(int currtime, int convtime, int convtime1)
     {
         isaterms1 = currtime <= convtime & currtime >= convtime1;
         return isaterms1;
@@ -65,15 +65,17 @@ class LessonsCalc
             {
                 lefttime = "До конца " + numberlesson[i] + " урока: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
             }
-            else
+            else if (i != 0)
             {
-                if (i != 0)
+                if (terms.getTerms1(conv.getConvert(hour,minutes), conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i-1], endlessonminutes[i-1])))
                 {
-                    if (terms.getTerms1(conv.getConvert(hour,minutes), conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i-1], endlessonminutes[i-1])))
-                    {
-                        lefttime = "До конца перемены между " + numberlesson[i-1] + " и " + numberlesson[i]  + "уроками: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i])-conv.getConvert(hour,minutes)) + " минут " + (60 - seconds) + " секунд.";
-                    }
+                    lefttime = "До конца перемены между " + numberlesson[i-1] + " и " + numberlesson[i]  + " уроками: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i])-conv.getConvert(hour,minutes)) + " минут " + (60 - seconds) + " секунд.";
                 }
+            }
+            else //if (conv.getConvert(hour,minutes) > conv.getConvert(endlessonhour[endlessonhour.length-1],endlessonminutes[endlessonminutes.length-1]) & conv.getConvert(hour,minutes) < conv.getConvert(startlessonhours[0],startlessonminutes[0]))
+            {
+                // ВРЕМЯ ДО НАЧАЛА ПАР
+                lefttime = " ";
             }
         }
         return lefttime;
@@ -125,11 +127,11 @@ public class MainActivity extends AppCompatActivity
                     public void run()
                     {
                         ZonedDateTime zone = ZonedDateTime.now();
-                        int hour = zone.getHour();
-                        int minutes = zone.getMinute();
+                        int hour = 3;//zone.getHour();
+                        int minutes = 4;//zone.getMinute();
                         int seconds = zone.getSecond();
-                        DayOfWeek dayofweek = zone.getDayOfWeek();
-//                      String dayofweek = "TUESDAY";
+                        //DayOfWeek dayofweek = zone.getDayOfWeek();
+                        String dayofweek = "TUESDAY";
                         System.out.println(dayofweek.toString());
                         outtime.setText(hour + ":" + minutes + ":" + seconds);
                         if (dayofweek.toString() == "MONDAY")
