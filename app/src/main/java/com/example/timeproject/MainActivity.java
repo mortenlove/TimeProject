@@ -81,6 +81,7 @@ class LessonsCalc
             else //if (conv.getConvert(hour,minutes) > conv.getConvert(endlessonhour[endlessonhour.length-1],endlessonminutes[endlessonminutes.length-1]) & conv.getConvert(hour,minutes) < conv.getConvert(startlessonhours[0],startlessonminutes[0]))
             {
                 // ВРЕМЯ ДО НАЧАЛА ПАР
+                // ДОБАВИТЬ ПРОВЕРКУ ЗАВТРАШНЕГО ДНЯ ЧЕРЕЗ КЛАСС
                 if (conv.getConvert(hour,minutes) > conv.getConvert(startlessonhours[0],startlessonminutes[0]))
                 {
                     lefttime = (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) / 60 + ":" + (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) % 60 + ":" + (60 - seconds);
