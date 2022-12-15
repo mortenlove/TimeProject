@@ -81,12 +81,20 @@ class LessonsCalc
             else //if (conv.getConvert(hour,minutes) > conv.getConvert(endlessonhour[endlessonhour.length-1],endlessonminutes[endlessonminutes.length-1]) & conv.getConvert(hour,minutes) < conv.getConvert(startlessonhours[0],startlessonminutes[0]))
             {
                 // ВРЕМЯ ДО НАЧАЛА ПАР
-//                if (conv.getConvert(hour,minutes) > conv.getConvert(startlessonhours[0], startlessonminutes[0]))
-//                {
+                if (conv.getConvert(hour,minutes) > conv.getConvert(startlessonhours[0],startlessonminutes[0]))
+                {
+                    lefttime = (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) / 60 + ":" + (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) % 60 + ":" + (60 - seconds);
+                    System.out.println(lefttime);
+                    System.out.println("1");
+                }
+                else
+                {
+                    lefttime = (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)) / 60 + ":" + (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)) % 60 + ":" + (60 - seconds);
+                    System.out.println(lefttime);
+                    System.out.println("2");
+                }
 //
-//                    lefttime = ((conv.getConvert(24,0) - conv.getConvert(hour, minutes) + conv.getConvert(startlessonhours[0], startlessonminutes[0]))/60) + ":" + ((conv.getConvert(24,0) - conv.getConvert(hour, minutes) + conv.getConvert(startlessonhours[0], startlessonminutes[0]))%60);
-//                }
-                lefttime = " 123 ";
+//                lefttime = " 123 ";
 
             }
         }
@@ -140,8 +148,8 @@ public class MainActivity extends AppCompatActivity
                     public void run()
                     {
                         ZonedDateTime zone = ZonedDateTime.now();
-                        int hour = 20;//zone.getHour();
-                        int minutes = 0;//zone.getMinute();
+                        int hour = zone.getHour();
+                        int minutes = zone.getMinute();
                         int seconds = zone.getSecond();
                         //DayOfWeek dayofweek = zone.getDayOfWeek();
                         String dayofweek = "TUESDAY";
