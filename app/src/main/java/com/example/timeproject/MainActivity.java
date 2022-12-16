@@ -69,13 +69,13 @@ class LessonsCalc
         {
             if (terms.getTerms(conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i], endlessonminutes[i]), conv.getConvert(hour, minutes)))
             {
-                lefttime = "До конца " + numberlesson[i] + " урока: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
+                lefttime = "До конца " + numberlesson[i] + " урока: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - 1 - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
             }
             else if (i != 0)
             {
                 if (terms.getTerms1(conv.getConvert(hour,minutes), conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i-1], endlessonminutes[i-1])))
                 {
-                    lefttime = "До конца перемены между " + numberlesson[i-1] + " и " + numberlesson[i]  + " уроками: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i])-conv.getConvert(hour,minutes)) + " минут " + (60 - seconds) + " секунд.";
+                    lefttime = "До конца перемены между " + numberlesson[i-1] + " и " + numberlesson[i]  + " уроками: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i])-conv.getConvert(hour,minutes) - 1) + " минут " + (60 - seconds) + " секунд.";
                 }
             }
             else //if (conv.getConvert(hour,minutes) > conv.getConvert(endlessonhour[endlessonhour.length-1],endlessonminutes[endlessonminutes.length-1]) & conv.getConvert(hour,minutes) < conv.getConvert(startlessonhours[0],startlessonminutes[0]))
@@ -84,13 +84,13 @@ class LessonsCalc
                 // ДОБАВИТЬ ПРОВЕРКУ ЗАВТРАШНЕГО ДНЯ ЧЕРЕЗ КЛАСС
                 if (conv.getConvert(hour,minutes) > conv.getConvert(startlessonhours[0],startlessonminutes[0]))
                 {
-                    lefttime = (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) / 60 + ":" + (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) % 60 + ":" + (60 - seconds);
+                    lefttime = (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) / 60 + ":" + (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])-1) % 60 + ":" + (60 - seconds);
                     System.out.println(lefttime);
                     System.out.println("1");
                 }
                 else
                 {
-                    lefttime = (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)) / 60 + ":" + (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)) % 60 + ":" + (60 - seconds);
+                    lefttime = (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)) / 60 + ":" + (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)-1) % 60 + ":" + (60 - seconds);
                     System.out.println(lefttime);
                     System.out.println("2");
                 }
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 }
-//
+
 //    // Идентификатор уведомления
 //    private int NOTIFY_ID = 101;
 //
