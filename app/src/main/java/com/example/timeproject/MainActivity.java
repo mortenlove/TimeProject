@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 }
-
+//
 //    // Идентификатор уведомления
 //    private int NOTIFY_ID = 101;
 //
