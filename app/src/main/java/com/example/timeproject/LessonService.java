@@ -1,4 +1,4 @@
-package com.example.timeprj;
+package com.example.timeproject;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
