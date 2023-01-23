@@ -1,12 +1,13 @@
 package com.example.timeproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 
@@ -19,7 +20,7 @@ import java.util.TimerTask;
 class Convert
 {
     // КОНВЕРТАЦИЯ ВРЕМЕНИ
-    public int converted;
+    private int converted;
     public int getConvert(int hour, int min)
     {
         converted = (hour * 60 + min);
@@ -32,14 +33,14 @@ class Convert
 class Terms
 {
     // УРОК
-    public boolean isaterms;
+    private boolean isaterms;
     public boolean getTerms(int convtime,int convtime1, int currtime)
     {
         isaterms = currtime >= convtime & currtime <= convtime1;
         return isaterms;
     }
     // ПЕРЕМЕНА
-    public boolean isaterms1;
+    private boolean isaterms1;
 
     public boolean getTerms1(int currtime, int convtime, int convtime1)
     {
@@ -56,20 +57,26 @@ class LessonsCalc
     Terms terms = new Terms();
 
     public String lefttime;
+    public String title;
+    public String mainText;
 
-    public String getLefttime(int hour, int minutes, int seconds, int[] startlessonhours,int[] endlessonhour, int[] startlessonminutes, int[] endlessonminutes, int[] numberlesson)
+    public void getLefttime(int hour, int minutes, int seconds, int[] startlessonhours,int[] endlessonhour, int[] startlessonminutes, int[] endlessonminutes, int[] numberlesson)
     {
         for (int i = 0; i < startlessonhours.length; i++)
         {
             if (terms.getTerms(conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i], endlessonminutes[i]), conv.getConvert(hour, minutes)))
             {
                 lefttime = "До конца " + numberlesson[i] + " урока: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - 1 - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
+                title = "Урок " + numberlesson[i];
+                mainText = "До конца: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - 1 - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
             }
             else if (i != 0)
             {
                 if (terms.getTerms1(conv.getConvert(hour,minutes), conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i-1], endlessonminutes[i-1])))
                 {
                     lefttime = "До конца перемены между " + numberlesson[i-1] + " и " + numberlesson[i]  + " уроками: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i]) - conv.getConvert(hour,minutes) - 1) + " минут " + (60 - seconds) + " секунд.";
+                    title = "Следующий урок " + numberlesson[i];
+                    mainText = "До начала: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i]) - conv.getConvert(hour,minutes) - 1) + " минут " + (60 - seconds) + " секунд.";
                 }
             }
             else //if (conv.getConvert(hour,minutes) > conv.getConvert(endlessonhour[endlessonhour.length-1],endlessonminutes[endlessonminutes.length-1]) & conv.getConvert(hour,minutes) < conv.getConvert(startlessonhours[0],startlessonminutes[0]))
@@ -90,9 +97,7 @@ class LessonsCalc
                 }
             }
         }
-        return lefttime;
     }
-
 }
 
 public class MainActivity extends AppCompatActivity
@@ -116,6 +121,8 @@ public class MainActivity extends AppCompatActivity
     final int[] mondaynumberlessons = new int[] {0,1,2,3,4,5,6,0,7,8,9,10,11,12,13,14};
 
     int lesson;
+    public static final String APP_PREFERENCES = "settings";
+    final String KEY_SWITCH_STATE = "SAVED_SWITCH_STATE";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -128,6 +135,8 @@ public class MainActivity extends AppCompatActivity
 
         Timer timer = new Timer();
         LessonsCalc lessons = new LessonsCalc();
+
+        LoadPreferences();
 
         timer.scheduleAtFixedRate(new TimerTask()
         {
@@ -146,13 +155,12 @@ public class MainActivity extends AppCompatActivity
                         int seconds = zone.getSecond();
                         DayOfWeek dayofweek = zone.getDayOfWeek();
                         //String dayofweek = "MONDAY";
-                        String lt;
                         //System.out.println(dayofweek.toString());
                         outtime.setText(hour + ":" + minutes + ":" + seconds);
                         if (dayofweek.toString() == "MONDAY")
                         {
-                            lt = lessons.getLefttime(hour,minutes,seconds,mondaystartlessonshours,mondayendlessonshours,mondaystartlessonsminutes,mondayendlessonsminutes,mondaynumberlessons);
-                            timetxt.setText(lt);
+                            lessons.getLefttime(hour,minutes,seconds,mondaystartlessonshours,mondayendlessonshours,mondaystartlessonsminutes,mondayendlessonsminutes,mondaynumberlessons);
+                            timetxt.setText(lessons.lefttime);
                             LaunchService();
                         }
                         else if (dayofweek.toString() == "SATURDAY" || dayofweek.toString() == "SUNDAY" || dayofweek.toString() == "FRIDAY" && hour >= 19)
@@ -161,27 +169,20 @@ public class MainActivity extends AppCompatActivity
                         }
                         else
                         {
-                            lt = lessons.getLefttime(hour,minutes,seconds,nomondaystartlessonshours,nomondayendlessonshours,nomondaystartlessonsminutes,nomondayendlessonsminutes,nomondaynumberlessons);
-                            timetxt.setText(lt);
+                            lessons.getLefttime(hour,minutes,seconds,nomondaystartlessonshours,nomondayendlessonshours,nomondaystartlessonsminutes,nomondayendlessonsminutes,nomondaynumberlessons);
+                            timetxt.setText(lessons.lefttime);
                             LaunchService();
                         }
-
-
-
                     }
                 });
             }
-
         },0,1000);
-
     }
 
     private void LaunchService()
     {
+        SwitchCompat switchbutton = findViewById(R.id.switch1);
         Intent intent = new Intent(this, LessonService.class);
-
-        Switch switchbutton = findViewById(R.id.switch1);
-
         switchbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
@@ -193,8 +194,26 @@ public class MainActivity extends AppCompatActivity
                 {
                     stopService(intent);
                 }
+                SavePreferences(KEY_SWITCH_STATE, state);
             }
         });
     }
-}
 
+    private void SavePreferences(String key, boolean value) {
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                APP_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    private void LoadPreferences() {
+        SwitchCompat switchbutton = findViewById(R.id.switch1);
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                APP_PREFERENCES, MODE_PRIVATE);
+        boolean savedSwitchState = sharedPreferences.getBoolean(
+                KEY_SWITCH_STATE, false);
+        switchbutton.setChecked(savedSwitchState);
+    }
+    //вынести функции связанные со свитч кнопкой в отдельный клас? (крашит весь проект)
+}
