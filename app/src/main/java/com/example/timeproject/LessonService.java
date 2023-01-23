@@ -1,5 +1,7 @@
 package com.example.timeproject;
 
+package com.example.timeprj;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -27,7 +29,6 @@ public class LessonService extends Service {
 
     final int[] nomondaynumberlessons = new int[] {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
 
-
     final int[] mondaystartlessonshours = new int[] {7,8,9,9,10,11,12,13,13,14,15,15,16,17,18,18};
     final int[] mondaystartlessonsminutes = new int[] {45,15,0,45,30,25,10,10,40,25,10,55,40,25,10,55};
 
@@ -41,6 +42,9 @@ public class LessonService extends Service {
     private static final String CHANNEL_ID = "Polytechrasp";
 
     private NotificationManager mNM;
+
+    Timer timer = new Timer();
+    LessonsCalc lessons = new LessonsCalc();
 
     @Override
     public void onCreate() {
@@ -64,47 +68,46 @@ public class LessonService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
+        timer.cancel();
+
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.cancel(NOTIFY_ID);
     }
 
     private  void MainCalculate()
     {
-        Timer timer = new Timer();
-        LessonsCalc lessons = new LessonsCalc();
-
         timer.scheduleAtFixedRate(new TimerTask()
         {
             @Override
             public void run()
             {
+
                 ZonedDateTime zone = ZonedDateTime.now();
 
                 int hour = zone.getHour();
                 int minutes = zone.getMinute();
                 int seconds = zone.getSecond();
                 DayOfWeek dayofweek = zone.getDayOfWeek();
-                String lt;
+                //String dayofweek = "MONDAY";
                 if (dayofweek.toString() == "MONDAY")
                 {
-                    lt = lessons.getLefttime(hour,minutes,seconds,mondaystartlessonshours,mondayendlessonshours,mondaystartlessonsminutes,mondayendlessonsminutes,mondaynumberlessons);
-                    NotificationLessons(lt);
+                    lessons.getLefttime(hour,minutes,seconds,mondaystartlessonshours,mondayendlessonshours,mondaystartlessonsminutes,mondayendlessonsminutes,mondaynumberlessons);
+                    NotificationLessons(lessons.title, lessons.mainText);
                 }
                 else if (dayofweek.toString() == "SATURDAY" || dayofweek.toString() == "SUNDAY" || dayofweek.toString() == "FRIDAY" && hour >= 19)
                 {
-                    lt = "ВЫХОДНОЙ";
+                    NotificationLessons("ВЫХОДНОЙ", "");
                 }
                 else
                 {
-                    lt = lessons.getLefttime(hour,minutes,seconds,nomondaystartlessonshours,nomondayendlessonshours,nomondaystartlessonsminutes,nomondayendlessonsminutes,nomondaynumberlessons);
-                    NotificationLessons(lt);
+                    lessons.getLefttime(hour,minutes,seconds,nomondaystartlessonshours,nomondayendlessonshours,nomondaystartlessonsminutes,nomondayendlessonsminutes,nomondaynumberlessons);
+                    NotificationLessons(lessons.title, lessons.mainText);
                 }
             }
-
         },0,1000);
     }
 
-    private void NotificationLessons(String lt)
+    private void NotificationLessons(String title, String mainText)
     {
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
@@ -112,8 +115,8 @@ public class LessonService extends Service {
 
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(android.R.drawable.ic_popup_reminder)
-                .setContentTitle("")
-                .setContentText(lt)
+                .setContentTitle(title)
+                .setContentText(mainText)
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
                 .build();
@@ -125,9 +128,6 @@ public class LessonService extends Service {
         mNM.notify(NOTIFY_ID ,notification);
 
 // иконку изменить
-// заголовок уведомлений, изменить
-//перемены не умещаются в 1 строку, не видно весь текст
-
     }
 
     private static void createChannelIfNeeded(NotificationManagerCompat manager) {
