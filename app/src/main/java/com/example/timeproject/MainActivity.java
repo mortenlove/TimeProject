@@ -86,14 +86,14 @@ class LessonsCalc
                 if (conv.getConvert(hour,minutes) > conv.getConvert(startlessonhours[0],startlessonminutes[0]))
                 {
                     lefttime = (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])) / 60 + ":" + (conv.getConvert(24,0) - conv.getConvert(hour,minutes) + conv.getConvert(startlessonhours[0],startlessonminutes[0])-1) % 60 + ":" + (60 - seconds);
-                    System.out.println(lefttime);
-                    System.out.println("1");
+//                    System.out.println(lefttime);
+//                    System.out.println("1");
                 }
                 else
                 {
                     lefttime = (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)) / 60 + ":" + (conv.getConvert(startlessonhours[0],startlessonminutes[0]) - conv.getConvert(hour,minutes)-1) % 60 + ":" + (60 - seconds);
-                    System.out.println(lefttime);
-                    System.out.println("2");
+//                    System.out.println(lefttime);
+//                    System.out.println("2");
                 }
             }
         }
