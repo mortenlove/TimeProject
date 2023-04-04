@@ -1,6 +1,5 @@
 package com.example.timeproject;
 
-package com.example.timeprj;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,6 +11,7 @@ import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.time.DayOfWeek;
@@ -37,7 +37,7 @@ public class LessonService extends Service {
 
     final int[] mondaynumberlessons = new int[] {0,1,2,3,4,5,6,0,7,8,9,10,11,12,13,14};
 
-    private static final int NOTIFY_ID = 105;
+    private static final int NOTIFY_ID = 15605;
 
     private static final String CHANNEL_ID = "Polytechrasp";
 
@@ -107,27 +107,23 @@ public class LessonService extends Service {
         },0,1000);
     }
 
-    private void NotificationLessons(String title, String mainText)
-    {
+    private void NotificationLessons(String title, String mainText) {
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, LessonService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, LessonService.class), PendingIntent.FLAG_IMMUTABLE);
 
-        Notification notification = new Notification.Builder(this)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_popup_reminder)
                 .setContentTitle(title)
                 .setContentText(mainText)
                 .setContentIntent(contentIntent)
-                .setOngoing(true)
-                .build();
+                .setOngoing(true);
 
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(LessonService.this);
         createChannelIfNeeded(notificationManager);
 
-        mNM.notify(NOTIFY_ID ,notification);
-
-// иконку изменить
+        mNM.notify(NOTIFY_ID ,builder.build());
     }
 
     private static void createChannelIfNeeded(NotificationManagerCompat manager) {
