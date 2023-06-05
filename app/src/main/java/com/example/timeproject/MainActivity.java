@@ -57,6 +57,8 @@ class LessonsCalc
     Terms terms = new Terms();
 
     public String lefttime;
+    public String lefttime2;
+    public String lefttime3;
     public String title;
     public String mainText;
 
@@ -66,7 +68,10 @@ class LessonsCalc
         {
             if (terms.getTerms(conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i], endlessonminutes[i]), conv.getConvert(hour, minutes)))
             {
-                lefttime = "До конца " + numberlesson[i] + " урока: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - 1 - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
+                //lefttime = "До конца " + numberlesson[i] + " урока: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - 1 - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
+                lefttime = "До конца";
+                lefttime2 = (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - 1 - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
+                lefttime3 = numberlesson[i] + " урока";
                 title = "Урок " + numberlesson[i];
                 mainText = "До конца: " + (conv.getConvert(endlessonhour[i], endlessonminutes[i]) - 1 - conv.getConvert(hour, minutes)) + " минут " + (60 - seconds) + " секунд.";
             }
@@ -74,7 +79,11 @@ class LessonsCalc
             {
                 if (terms.getTerms1(conv.getConvert(hour,minutes), conv.getConvert(startlessonhours[i], startlessonminutes[i]), conv.getConvert(endlessonhour[i-1], endlessonminutes[i-1])))
                 {
-                    lefttime = "До конца перемены между " + numberlesson[i-1] + " и " + numberlesson[i]  + " уроками: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i]) - conv.getConvert(hour,minutes) - 1) + " минут " + (60 - seconds) + " секунд.";
+                    //lefttime = "До конца перемены между " + numberlesson[i-1] + " и " + numberlesson[i]  + " уроками: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i]) - conv.getConvert(hour,minutes) - 1) + " минут " + (60 - seconds) + " секунд.";
+                    lefttime = "До конца перемены между";
+                    lefttime2 = (conv.getConvert(startlessonhours[i] ,startlessonminutes[i]) - conv.getConvert(hour,minutes) - 1) + " минут " + (60 - seconds) + " секунд.";
+
+                    lefttime3 = numberlesson[i-1] + " и " + numberlesson[i];
                     title = "Следующий урок " + numberlesson[i];
                     mainText = "До начала: " + (conv.getConvert(startlessonhours[i] ,startlessonminutes[i]) - conv.getConvert(hour,minutes) - 1) + " минут " + (60 - seconds) + " секунд.";
                 }
@@ -131,7 +140,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         TextView timetxt = findViewById(R.id.textView);
-        TextView outtime = findViewById(R.id.textView2);
+        TextView timetxt2 = findViewById(R.id.textView2);
+        TextView timetxt3 = findViewById(R.id.textView3);
+
+//        TextView outtime = findViewById(R.id.textView2);
 
         Timer timer = new Timer();
         LessonsCalc lessons = new LessonsCalc();
@@ -156,11 +168,13 @@ public class MainActivity extends AppCompatActivity
                         DayOfWeek dayofweek = zone.getDayOfWeek();
                         //String dayofweek = "MONDAY";
                         //System.out.println(dayofweek.toString());
-                        outtime.setText(hour + ":" + minutes + ":" + seconds);
+//                        outtime.setText(hour + ":" + minutes + ":" + seconds);
                         if (dayofweek.toString() == "MONDAY")
                         {
                             lessons.getLefttime(hour,minutes,seconds,mondaystartlessonshours,mondayendlessonshours,mondaystartlessonsminutes,mondayendlessonsminutes,mondaynumberlessons);
                             timetxt.setText(lessons.lefttime);
+                            timetxt2.setText(lessons.lefttime2);
+                            timetxt3.setText(lessons.lefttime3);
                             LaunchService();
                         }
                         else if (dayofweek.toString() == "SATURDAY" || dayofweek.toString() == "SUNDAY" || dayofweek.toString() == "FRIDAY" && hour >= 19)
@@ -171,6 +185,9 @@ public class MainActivity extends AppCompatActivity
                         {
                             lessons.getLefttime(hour,minutes,seconds,nomondaystartlessonshours,nomondayendlessonshours,nomondaystartlessonsminutes,nomondayendlessonsminutes,nomondaynumberlessons);
                             timetxt.setText(lessons.lefttime);
+                            timetxt2.setText(lessons.lefttime2);
+                            timetxt3.setText(lessons.lefttime3);
+
                             LaunchService();
                         }
                     }
